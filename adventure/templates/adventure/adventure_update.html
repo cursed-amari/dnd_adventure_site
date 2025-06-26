@@ -1,0 +1,182 @@
+{% extends "home_page/base.html" %}
+{% block title %}Update {{ adventure.title }} - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+<div class="fade-in">
+    <h1 class="mb-4"><i class="fa-solid fa-pen-to-square"></i> Rewrite Adventure</h1>
+    <hr class="dnd-divider">
+
+    <form method="post" enctype="multipart/form-data" class="parchment p-4">
+        {% csrf_token %}
+
+        <!-- Обработка ошибок -->
+        {% if form.non_field_errors or form.errors %}
+        <div class="alert alert-danger dnd-alert mb-4">
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
+            Please correct the errors below.
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <!-- Левая колонка -->
+            <div class="col-md-6">
+                <!-- Название -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-scroll me-2"></i>Adventure Title*
+                    </label>
+                    {{ form.title }}
+                </div>
+
+                <!-- Количество игроков -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-users me-2"></i>Party Size*
+                    </label>
+                    {{ form.amount_players }}
+                </div>
+
+                <!-- Уровень игроков -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-users me-2"></i>Party level*
+                    </label>
+                    {{ form.level }}
+                </div>
+
+                <!-- Длительность -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-hourglass-half me-2"></i>Estimated Duration
+                    </label>
+                    {{ form.duration }}
+                </div>
+            </div>
+
+            <!-- Правая колонка -->
+            <div class="col-md-6">
+                <!-- Изображение -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-image me-2"></i>Cover Art
+                    </label>
+                    <div class="dnd-file-upload">
+                        {{ form.image }}
+                        {% if adventure.image %}
+                        <div class="file-upload-preview mt-2">
+                            <img src="{{ adventure.image }}" class="img-fluid rounded" style="max-height: 150px;">
+                            <p class="small mb-0 mt-2">Current image</p>
+                        </div>
+                        {% else %}
+                        <div class="file-upload-preview mt-2">
+                            <i class="fa-solid fa-mountain-sun fa-3x text-muted"></i>
+                            <p class="small mb-0">No image selected</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Файл -->
+                <div class="mb-4">
+                    <label class="form-label dnd-label">
+                        <i class="fa-solid fa-file-pdf me-2"></i>Adventure Module*
+                    </label>
+                    <div class="dnd-file-upload">
+                        {{ form.file }}
+                        <div class="file-upload-preview mt-2">
+                            <i class="fa-solid fa-file-contract fa-3x text-muted"></i>
+                            <p class="small mb-0">Current file: {{ adventure.file.name|cut:"adventures/" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Описание - УВЕЛИЧЕНО ПОЛЕ -->
+        <div class="mb-4 dnd-description-field">
+            <label class="form-label dnd-label">
+                <i class="fa-solid fa-book me-2"></i>Adventure Lore*
+            </label>
+            {{ form.description }}
+        </div>
+
+        <!-- Кнопка сохранения ПОДНЯТА ВЫШЕ и добавлен отступ -->
+        <div class="d-flex justify-content-end mt-5 mb-4"> <!-- Добавлен mt-5 и mb-4 -->
+            <button type="submit" class="btn btn-dnd btn-lg"> <!-- Увеличена кнопка -->
+                <i class="fa-solid fa-floppy-disk me-2"></i>Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .dnd-file-upload {
+        border: 2px dashed var(--dnd-gold);
+        border-radius: 8px;
+        padding: 15px;
+        background: rgba(212, 175, 55, 0.05);
+    }
+
+    .file-upload-preview {
+        text-align: center;
+        padding: 10px;
+    }
+
+    /* Увеличено поле для описания */
+    textarea {
+        width: 100%;
+        resize: vertical; /* Разрешаем изменение размера по вертикали */
+    }
+    .dnd-description-field {
+        min-height: 300px !important;
+        width: 100% !important;
+        resize: vertical;
+        padding: 15px !important;
+        border: 2px solid var(--dnd-gold) !important;
+        border-radius: 8px !important;
+        background: var(--dnd-parchment) !important;
+        font-family: 'EB Garamond', serif !important;
+        font-size: 1.1rem !important;
+    }
+
+    .dnd-description-field:focus {
+        border-color: var(--dnd-red) !important;
+        box-shadow: 0 0 0 0.25rem rgba(139, 0, 0, 0.25) !important;
+    }
+    /* Увеличена кнопка */
+    .btn-lg {
+        padding: 0.75rem 2rem;
+        font-size: 1.25rem;
+    }
+</style>
+
+<script>
+    // Обновление превью при выборе файла
+    $(document).ready(function() {
+        $('input[type="file"]').change(function(e) {
+            const preview = $(this).siblings('.file-upload-preview');
+            const fileName = e.target.files[0].name;
+
+            if (this.id === 'id_image') {
+                // Для изображений
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.html(`
+                        <img src="${e.target.result}" class="img-fluid rounded" style="max-height: 150px;">
+                        <p class="small mb-0 mt-2">${fileName}</p>
+                    `);
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            } else {
+                // Для файлов
+                preview.html(`
+                    <i class="fa-solid fa-file-pdf fa-3x text-danger"></i>
+                    <p class="small mb-0 mt-2">${fileName}</p>
+                `);
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "home_page/base.html" %}
+{% block title %}{{ profile.user.username }}'s Profile - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+<div class="fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fa-solid fa-user-helmet-safety me-3"></i>{{ profile.user.username }}'s Profile</h1>
+        <small class="text-muted">Member since: {{ profile.register_date|date:"F d, Y" }}</small>
+    </div>
+    <hr class="dnd-divider">
+
+    <div class="parchment p-4 mb-5">
+        <div class="row">
+            <!-- Левая колонка - аватар и статистика -->
+            <div class="col-md-4 text-center">
+                <div class="mb-4">
+                    <div class="avatar-placeholder" style="width: 150px; height: 150px; border-radius: 50%; background: #d4af37; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+                        <i class="fa-solid fa-dragon" style="color: #8b0000;"></i>
+                    </div>
+                    <h3>{{ profile.user.username }}</h3>
+                    <p class="text-muted">Adventurer</p>
+                </div>
+
+                <div class="dnd-stats">
+                    <div class="stat-item mb-3">
+                        <h5><i class="fa-solid fa-scroll me-2"></i>Adventures</h5>
+                        <div class="stat-value">{{ adventure_count }}</div>
+                    </div>
+                    <div class="stat-item mb-3">
+                        <h5><i class="fa-solid fa-calendar-day me-2"></i>Member Since</h5>
+                        <div class="stat-value">{{ profile.register_date|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка - информация и действия -->
+            <div class="col-md-8">
+                <h3 class="mb-4"><i class="fa-solid fa-scroll-quill me-2"></i>Adventurer's Journal</h3>
+                <p class="dnd-text">Welcome to your adventurer's profile! Here you can manage your campaigns and personal information.</p>
+
+                <div class="mt-5">
+                    <h4 class="mb-3"><i class="fa-solid fa-toolbox me-2"></i>Account Tools</h4>
+                    <div class="d-grid gap-2">
+                        {% if request.user.id == profile.user.id %}
+                            <a href="{% url 'password_change' %}" class="btn btn-dnd-outline mb-2">
+                                <i class="fa-solid fa-key me-2"></i>Change Password
+                            </a>
+                            <a href="{% url 'user-adventure' %}" class="btn btn-dnd-outline mb-2">
+                                <i class="fa-solid fa-map me-2"></i>My Adventures
+                            </a>
+                            <a href="{% url 'create-adventure' %}" class="btn btn-dnd-outline mb-2">
+                                <i class="fa-solid fa-plus me-2"></i>Create New Adventure
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dnd-stats {
+        background: rgba(139, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid var(--dnd-gold);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-family: 'Cinzel', serif;
+        font-size: 1.8rem;
+        color: var(--dnd-red);
+    }
+
+    .dnd-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .btn-dnd-outline {
+        background: transparent;
+        border: 2px solid var(--dnd-red);
+        color: var(--dnd-red);
+        font-family: 'Cinzel', serif;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dnd-outline:hover {
+        background: var(--dnd-red);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .avatar-placeholder {
+        box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+    }
+</style>
+{% endblock %}

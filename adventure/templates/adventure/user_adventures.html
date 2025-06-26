@@ -1,0 +1,126 @@
+{% extends "home_page/base.html" %}
+{% block title %}My Adventures - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+<div class="fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fa-solid fa-scroll"></i> My Adventure Scrolls</h1>
+        <a href="{% url 'create-adventure' %}" class="btn btn-dnd">
+            <i class="fa-solid fa-plus me-2"></i>Forge New
+        </a>
+    </div>
+    <hr class="dnd-divider">
+
+    {% if posts %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for post in posts %}
+        <div class="col fade-in" style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+            <div class="adventure-card">
+                <a href="{% url 'adventure_detail' post.slug %}">
+                    <div class="card h-100 border-0 shadow-lg adventure-card-inner">
+                        <div class="card-img-top overflow-hidden position-relative" style="height: 200px;">
+                            {% if post.image %}
+                            <img src="{{ post.image.url }}" class="w-100 h-100" alt="{{ post.title }}"
+                                 style="object-fit: cover; transition: transform 0.5s ease;">
+                            {% else %}
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center"
+                                 style="background: linear-gradient(135deg, var(--dnd-dark), var(--dnd-red));">
+                                <i class="fa-solid fa-dungeon fa-3x text-dnd-gold"></i>
+                            </div>
+                            {% endif %}
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3 text-white"
+                                 style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                                <h5 class="card-title mb-0">{{ post.title }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ post.description|truncatechars:100 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ post.time_update|date:"M d, Y" }}</small>
+                                <span class="badge bg-dnd-red">{{ post.amount_players }} players</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div class="adventure-actions mt-2">
+                    <a href="{% url 'update-adventure' post.slug %}" class="btn btn-sm btn-dnd-outline me-2">
+                        <i class="fa-solid fa-pen-to-square me-1"></i>Edit
+                    </a>
+                    <a href="{% url 'adventure_detail' post.slug %}" class="btn btn-sm btn-dnd">
+                        <i class="fa-solid fa-eye me-1"></i>View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5 parchment">
+        <h4>Your adventure journal is empty</h4>
+        <p>Begin your legacy by creating your first adventure!</p>
+        <i class="fa-solid fa-feather fa-3x text-dnd-gold my-4"></i>
+        <div>
+            <a href="{% url 'create-adventure' %}" class="btn btn-lg btn-dnd">
+                <i class="fa-solid fa-plus me-2"></i>Forge First Adventure
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .adventure-card {
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .adventure-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .adventure-card-inner {
+        border: 2px solid var(--dnd-gold);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--dnd-parchment);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .adventure-card:hover .adventure-card-inner {
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3);
+    }
+
+    .adventure-card:hover .card-img-top img {
+        transform: scale(1.05);
+    }
+
+    .bg-dnd-red {
+        background: var(--dnd-red) !important;
+    }
+
+    .btn-dnd-outline {
+        background: transparent;
+        border: 2px solid var(--dnd-red);
+        color: var(--dnd-red);
+        font-family: 'Cinzel', serif;
+        padding: 0.25rem 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dnd-outline:hover {
+        background: var(--dnd-red);
+        color: white;
+    }
+
+    .adventure-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .text-dnd-gold {
+        color: var(--dnd-gold);
+    }
+</style>
+{% endblock %}

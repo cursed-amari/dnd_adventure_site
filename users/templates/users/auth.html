@@ -1,0 +1,136 @@
+{% extends 'home_page/base.html' %}
+{% block title %}Login - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+<div class="fade-in" style="max-width: 500px; margin: 0 auto;">
+    <h1 class="mb-4"><i class="fa-solid fa-dragon"></i> Adventurer's Login</h1>
+    <hr class="dnd-divider">
+
+    <form method="post" class="parchment p-4">
+        {% csrf_token %}
+
+        <!-- Обработка ошибок -->
+        {% if form.errors %}
+        <div class="alert alert-danger dnd-alert">
+            <i class="fa-solid fa-circle-exclamation"></i> Incorrect username or password.
+        </div>
+        {% endif %}
+
+        <!-- Поле username -->
+        <div class="mb-4">
+            <label for="id_username" class="form-label dnd-label">
+                <i class="fa-solid fa-user me-2"></i>Username
+            </label>
+            {{ form.username }}
+        </div>
+
+        <!-- Поле password -->
+        <div class="mb-4">
+            <label for="id_password" class="form-label dnd-label">
+                <i class="fa-solid fa-lock me-2"></i>Password
+            </label>
+            <div class="position-relative">
+                {{ form.password }}
+                <i class="fa-solid fa-eye password-toggle position-absolute"
+                   style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button type="submit" class="btn btn-dnd">
+                <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+            </button>
+            <a href="{% url 'register' %}" class="dnd-link">
+                <i class="fa-solid fa-user-plus me-1"></i>Create Account
+            </a>
+        </div>
+    </form>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'password_change' %}" class="dnd-link-sm">
+            <i class="fa-solid fa-key me-1"></i>Forgot Password?
+        </a>
+    </div>
+</div>
+
+<style>
+    .dnd-label {
+        font-family: 'Cinzel', serif;
+        font-weight: bold;
+        color: var(--dnd-red);
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        background-color: var(--dnd-parchment);
+        border: 2px solid var(--dnd-gold);
+        border-radius: 4px;
+        padding: 10px 15px;
+        font-family: 'EB Garamond', serif;
+        font-size: 1.1rem;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(139, 0, 0, 0.25);
+        border-color: var(--dnd-red);
+    }
+
+    .dnd-alert {
+        background: rgba(139, 0, 0, 0.1);
+        border: 1px solid var(--dnd-red);
+        border-radius: 4px;
+    }
+
+    .btn-dnd {
+        background: var(--dnd-red);
+        color: white;
+        border: none;
+        font-family: 'Cinzel', serif;
+        padding: 0.5rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dnd:hover {
+        background: var(--dnd-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .dnd-link {
+        color: var(--dnd-red);
+        text-decoration: none;
+        font-family: 'Cinzel', serif;
+        transition: all 0.2s ease;
+    }
+
+    .dnd-link:hover {
+        color: var(--dnd-dark);
+        text-decoration: underline;
+    }
+
+    .dnd-link-sm {
+        color: var(--dnd-dark);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .dnd-link-sm:hover {
+        text-decoration: underline;
+        color: var(--dnd-red);
+    }
+</style>
+
+<script>
+    // Toggle password visibility
+    $(document).ready(function() {
+        $('.password-toggle').click(function() {
+            const input = $(this).prev('input');
+            const type = input.attr('type') === 'password' ? 'text' : 'password';
+            input.attr('type', type);
+            $(this).toggleClass('fa-eye fa-eye-slash');
+        });
+    });
+</script>
+{% endblock %}

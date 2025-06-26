@@ -1,0 +1,48 @@
+{% extends "home_page/base.html" %}
+{% block title %}Home - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+    <div class="fade-in">
+        <h1 class="mb-4"><i class="fa-solid fa-dragon"></i> Welcome Adventurers!</h1>
+        <hr class="dnd-divider">
+
+        <div class="text-start">
+            {% for post in posts %}
+            <div class="mb-5 fade-in" style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="mb-0">{{ post.title }}</h3>
+                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                </div>
+                <div class="post-content" style="border-left: 3px solid var(--dnd-gold); padding-left: 15px;">
+                    {{ post.context|linebreaks }}
+                </div>
+            </div>
+            {% if not forloop.last %}<hr>{% endif %}
+            {% empty %}
+            <div class="text-center py-5">
+                <h4>No posts yet</h4>
+                <p>Check back later for updates!</p>
+                <i class="fa-solid fa-scroll fa-3x mt-3" style="color: var(--dnd-gold);"></i>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .post-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .post-content::first-letter {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--dnd-red);
+            float: left;
+            line-height: 1;
+            margin-right: 8px;
+        }
+    </style>
+{% endblock %}

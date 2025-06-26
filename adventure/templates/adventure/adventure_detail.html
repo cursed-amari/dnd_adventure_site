@@ -1,0 +1,153 @@
+{% extends "home_page/base.html" %}
+{% block title %}{{ title }} - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+<div class="fade-in">
+    <!-- Заголовок и информация -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fa-solid fa-dungeon"></i> {{ title|capfirst }}</h1>
+        <small class="text-muted">Last updated: {{ time_update|date:"F d, Y" }}</small>
+    </div>
+    <hr class="dnd-divider">
+
+    <div class="parchment p-4">
+        <!-- Изображение -->
+        {% if image %}
+        <div class="text-center mb-5">
+            <img src="{{ image }}" class="img-fluid rounded adventure-detail-image" alt="{{ title }}">
+        </div>
+        {% endif %}
+
+        <!-- Основная информация -->
+        <div class="row mb-5 gx-2">
+            <div class="col-6 col-md-3">
+                <div class="dnd-info-card text-center p-3">
+                    <i class="fa-solid fa-hat-wizard fa-2x mb-3"></i>
+                    <h4>Storyteller</h4>
+                    <p class="dnd-info-value">{{ username }}</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dnd-info-card text-center p-3">
+                    <i class="fa-solid fa-users fa-2x mb-3"></i>
+                    <h4>Party Size</h4>
+                    <p class="dnd-info-value">{{ amount_players }} adventurers</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dnd-info-card text-center p-3">
+                    <i class="fa-solid fa-hourglass-half fa-2x mb-3"></i>
+                    <h4>Party Level</h4>
+                    <p class="dnd-info-value">{{ level }} level</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dnd-info-card text-center p-3">
+                    <i class="fa-solid fa-hourglass-half fa-2x mb-3"></i>
+                    <h4>Journey Length</h4>
+                    <p class="dnd-info-value">{{ duration }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Описание -->
+        <div class="mb-5">
+            <h3 class="mb-4"><i class="fa-solid fa-scroll me-2"></i>The Tale Unfolds</h3>
+            <div class="dnd-description">
+                {{ description|linebreaks }}
+            </div>
+        </div>
+
+        <!-- Файл для скачивания -->
+        <div class="mb-5">
+            <h3 class="mb-4"><i class="fa-solid fa-treasure-chest me-2"></i>Adventure Scrolls</h3>
+            <div class="dnd-download-card">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-scroll fa-3x me-4 text-dnd-gold"></i>
+                    <div>
+                        <h5 class="mb-0">{{ title }} Module</h5>
+                        <p class="mb-0 text-muted">Complete adventure guide</p>
+                    </div>
+                    <a href="{{ file }}" download class="btn btn-dnd ms-auto">
+                        <i class="fa-solid fa-download me-2"></i>Claim Scroll
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Закрываем основной блок parchment здесь -->
+
+    <!-- Кнопка редактирования ВЫНЕСЕНА ЗА ПРЕДЕЛЫ PARCHMENT -->
+    {% if request.user.username == username %}
+    <div class="text-center mt-4 mb-5"> <!-- Добавлены отступы -->
+        <a href="{% url 'update-adventure' slug %}" class="btn btn-dnd-outline btn-lg"> <!-- Увеличена кнопка -->
+            <i class="fa-solid fa-pen-to-square me-2"></i>Edit Adventure
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .adventure-detail-image {
+        border: 3px solid var(--dnd-gold);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        max-height: 400px;
+        object-fit: cover;
+    }
+
+    .dnd-info-card {
+        background: rgba(139, 0, 0, 0.05);
+        border: 2px solid var(--dnd-gold);
+        border-radius: 8px;
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .dnd-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dnd-info-value {
+        font-family: 'Cinzel', serif;
+        font-size: 1.5rem;
+        color: var(--dnd-red);
+        margin-bottom: 0;
+    }
+
+    .dnd-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        padding: 20px;
+        background: rgba(247, 240, 212, 0.5);
+        border-left: 3px solid var(--dnd-red);
+    }
+
+    .dnd-description::first-letter {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        color: var(--dnd-red);
+        float: left;
+        line-height: 0.8;
+        margin-right: 8px;
+    }
+
+    .dnd-download-card {
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px solid var(--dnd-gold);
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .dnd-download-card:hover {
+        background: rgba(212, 175, 55, 0.2);
+        transform: scale(1.02);
+    }
+
+    .text-dnd-gold {
+        color: var(--dnd-gold);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "home_page/base.html" %}
+{% block title %}Adventures - D&D 5e Campaign Hub{% endblock %}
+{% block navbar %}
+{% include "home_page/navbar.html" %}
+{% endblock %}
+{% block context %}
+    <div class="fade-in">
+        <h1 class="mb-4"><i class="fa-solid fa-map"></i> Campaign Adventures</h1>
+        <hr class="dnd-divider">
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for adventure in adventures %}
+            <div class="col fade-in" style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                <a href="{% url 'adventure_detail' adventure.slug %}" class="text-decoration-none adventure-card">
+                    <div class="card h-100 border-0 shadow-lg adventure-card-inner">
+                        <div class="card-img-top overflow-hidden position-relative" style="height: 200px;">
+                            <img src="{{ adventure.image.url }}" class="w-100 h-100" alt="{{ adventure.title }}"
+                                 style="object-fit: cover; transition: transform 0.5s ease;">
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3 text-white"
+                                 style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                                <h5 class="card-title mb-0">{{ adventure.title }}</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ adventure.description|truncatechars:120 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ adventure.time_update|date:"M d, Y" }}</small>
+                                <span class="badge bg-dnd-red">{{ adventure.get_level_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <h4>No adventures available</h4>
+                <p>Be the first to create one!</p>
+                <a href="{% url 'create-adventure' %}" class="btn btn-lg btn-dnd mt-3">
+                    <i class="fa-solid fa-plus"></i> Create Adventure
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .adventure-card {
+            transition: transform 0.3s ease;
+        }
+
+        .adventure-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .adventure-card-inner {
+            border: 2px solid var(--dnd-gold);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--dnd-parchment);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .adventure-card:hover .adventure-card-inner {
+            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3);
+        }
+
+        .adventure-card:hover .card-img-top img {
+            transform: scale(1.05);
+        }
+
+        .bg-dnd-red {
+            background: var(--dnd-red) !important;
+        }
+
+        .btn-dnd {
+            background: var(--dnd-red);
+            color: white;
+            border: none;
+            font-family: 'Cinzel', serif;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .btn-dnd:hover {
+            background: var(--dnd-dark);
+            color: var(--dnd-gold);
+        }
+    </style>
+{% endblock %}

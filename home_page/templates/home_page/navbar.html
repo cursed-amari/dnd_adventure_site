@@ -1,0 +1,85 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--dnd-dark); border-bottom: 3px solid var(--dnd-gold);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#" style="font-family: 'MedievalSharp', cursive;">
+            <i class="fa-solid fa-dragon me-2"></i>DMS Campaign Hub
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link{{ navbar_home }} dnd-nav-link" href="{% url 'home_page' %}">
+                        <i class="fa-solid fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{ navbar_adventure }} dnd-nav-link" href="{% url 'adventure' %}">
+                        <i class="fa-solid fa-map me-1"></i>Adventure
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle{{ navbar_user }} dnd-nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user me-1"></i>{{ request.user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="background: var(--dnd-dark); border: 1px solid var(--dnd-gold);">
+                        <li><a class="dropdown-item text-light" href="{% url 'profile' request.user.id %}">
+                            <i class="fa-solid fa-id-card me-2"></i>Profile
+                        </a></li>
+                        <li><a class="dropdown-item text-light" href="{% url 'user-adventure' %}">
+                            <i class="fa-solid fa-scroll me-2"></i>My Adventure
+                        </a></li>
+                        <li><a class="dropdown-item text-light" href="{% url 'create-adventure' %}">
+                            <i class="fa-solid fa-feather-pointed me-2"></i>Create Adventure
+                        </a></li>
+                        <li><hr class="dropdown-divider" style="border-color: var(--dnd-gold);"></li>
+                        <li><a class="dropdown-item text-light" href="{% url 'logout' %}">
+                            <i class="fa-solid fa-door-open me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link dnd-nav-link" href="{% url 'login' %}">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Login
+                    </a>
+                </li>
+                {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .dnd-nav-link {
+        font-family: 'Cinzel', serif;
+        font-weight: bold;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .dnd-nav-link:hover {
+        color: var(--dnd-gold) !important;
+    }
+
+    .dnd-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--dnd-gold);
+        transition: width 0.3s ease;
+    }
+
+    .dnd-nav-link:hover::after {
+        width: 100%;
+    }
+
+    .dropdown-item:hover {
+        background: var(--dnd-red) !important;
+        color: white !important;
+    }
+</style>

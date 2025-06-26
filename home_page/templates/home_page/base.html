@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Dungeons & Dragons 5e{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&family=EB+Garamond&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dnd-dark: #1a0a0a;
+            --dnd-red: #8b0000;
+            --dnd-gold: #d4af37;
+            --dnd-beige: #f5f1e6;
+            --dnd-parchment: #f7f0d4;
+        }
+
+        body {
+            background: url('https://i.imgur.com/pX9XyFp.jpg') fixed;
+            background-size: cover;
+            color: #333;
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .container.text-center {
+            background: rgba(247, 240, 212, 0.92);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border-left: 2px solid var(--dnd-gold);
+            border-right: 2px solid var(--dnd-gold);
+            padding: 0;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes parchmentRoll {
+            0% { transform: scaleY(0); opacity: 0; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .parchment {
+            background: linear-gradient(to bottom, #f7f0d4, #e8dfb9);
+            border: 1px solid #d4af37;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+            position: relative;
+            padding: 2rem;
+            margin: 1rem 0;
+            transform-origin: top;
+            animation: parchmentRoll 0.6s ease-out forwards;
+        }
+
+        .parchment::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: url('https://i.imgur.com/3Qm4x8B.png') repeat-x;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cinzel', serif;
+            color: var(--dnd-red);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .dnd-divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--dnd-gold), transparent);
+            margin: 1.5rem 0;
+            border: none;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-1 d-none d-lg-block"></div>
+            <div class="col-lg-10">
+                {% block navbar %}{% endblock %}
+                <div class="parchment mt-3">
+                    {% block context %}{% endblock %}
+                </div>
+            </div>
+            <div class="col-lg-1 d-none d-lg-block"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3" style="background: var(--dnd-dark); color: var(--dnd-gold); position: absolute; bottom: 0; width: 100%;">
+        <div class="container">
+            <p>Dungeons & Dragons 5e Campaign Hub © {% now "Y" %}</p>
+            <div class="dragon-icon">
+                <i class="fa-solid fa-dragon fa-2x" style="color: #d4af37;"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Базовая анимация при загрузке
+        $(document).ready(function() {
+            $('.fade-in').each(function(i) {
+                $(this).delay(200 * i).queue(function() {
+                    $(this).addClass('fade-in').dequeue();
+                });
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
